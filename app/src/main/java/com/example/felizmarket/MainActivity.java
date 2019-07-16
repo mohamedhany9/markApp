@@ -1,24 +1,24 @@
 package com.example.felizmarket;
 
-import android.arch.persistence.room.Room;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
+
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.felizmarket.adapter.AdapterItem;
 import com.example.felizmarket.adapter.AdapterItemGrid;
-import com.example.felizmarket.db.AppDatabase;
-import com.example.felizmarket.db.CartItem;
 import com.example.felizmarket.model.ProductsResponse;
 import com.example.felizmarket.network.ApiClient;
 import com.example.felizmarket.network.ApiInterface;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -28,12 +28,20 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Gson gson = new Gson();
+    private SharedPreferences shared;
+    private SharedPreferences.Editor editor;
+    private String json = "";
+    private String retrivedata = "";
+
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.LayoutManager layoutManager2;
     private AdapterItem adapter;
     private AdapterItemGrid gadapter;
-    private ImageView gridBtn , listBtn;
+    private ImageView gridBtn, listBtn;
+
+    private FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rv);
         gridBtn = findViewById(R.id.gridlayout_btn);
         listBtn = findViewById(R.id.listlayout_btn);
+        floatingActionButton = findViewById(R.id.fab);
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -71,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                layoutManager2 = new GridLayoutManager(MainActivity.this,2);
+                layoutManager2 = new GridLayoutManager(MainActivity.this, 2);
                 recyclerView.setLayoutManager(layoutManager2);
                 recyclerView.setHasFixedSize(true);
 
@@ -130,12 +139,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final AppDatabase db = Room.databaseBuilder(getApplicationContext()
-                ,AppDatabase.class ,"production")
-                .allowMainThreadQueries()
-                .build();
-
-
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this , ShoppingActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 }

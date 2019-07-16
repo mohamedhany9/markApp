@@ -1,29 +1,31 @@
 package com.example.felizmarket;
 
-import android.arch.persistence.room.Room;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
-import com.example.felizmarket.db.AppDatabase;
-import com.example.felizmarket.db.CartItem;
+import com.example.felizmarket.adapter.ShoppingAdapter;
+
 
 public class ShoppingActivity extends AppCompatActivity {
 
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private ShoppingAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
 
-        String name = getIntent().getExtras().getString("name");
-        String price = getIntent().getExtras().getString("price");
-        String img =  getIntent().getExtras().getString("img");
 
+        recyclerView = findViewById(R.id.recycler_view2);
 
-        final AppDatabase db = Room.databaseBuilder(getApplicationContext()
-                ,AppDatabase.class ,"production")
-                .allowMainThreadQueries()
-                .build();
-
-        db.cartDao().insertAll(new CartItem(name, price , img));
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        adapter = new ShoppingAdapter();
+        recyclerView.setAdapter(adapter);
     }
 }
